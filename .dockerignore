@@ -1,0 +1,15 @@
+node_modules
+.next
+.git
+.env
+.env.*
+!.env.example
+uploads
+data
+*.md
+.DS_Store
+coverage
+.turbo
+npm-debug.log*
+.vscode
+.idea

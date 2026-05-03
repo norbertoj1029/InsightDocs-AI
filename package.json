@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
-    "start": "next start",
+    "start": "next start -H 0.0.0.0 -p 3000",
     "lint": "next lint",
     "postinstall": "prisma generate",
     "db:push": "prisma db push",
@@ -23,10 +23,12 @@
     "next-auth": "^5.0.0-beta.25",
     "openai": "^4.96.0",
     "pdf-parse": "^1.1.1",
+    "prisma": "^6.7.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-merge": "^3.2.0",
     "tiktoken": "^1.0.21",
+    "tsx": "^4.19.3",
     "zod": "^3.24.3"
   },
   "devDependencies": {
@@ -36,10 +38,11 @@
     "@types/pdf-parse": "^1.1.4",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "autoprefixer": "^10.4.21",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
-    "prisma": "^6.7.0",
-    "tsx": "^4.19.3",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
     "typescript": "^5"
   }
 }

@@ -1,6 +1,6 @@
-import { getEncoding } from "tiktoken";
+import { get_encoding } from "tiktoken";
 
-const enc = getEncoding("cl100k_base");
+const enc = get_encoding("cl100k_base");
 
 export type TextChunk = {
   index: number;

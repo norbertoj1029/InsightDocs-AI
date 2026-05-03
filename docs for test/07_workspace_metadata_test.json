@@ -1,0 +1,13 @@
+{
+  "workspace": "Acme Retail Knowledge Base",
+  "documents": [
+    {"name": "Service Agreement", "risk_level": "medium", "owner": "Legal", "review_due": "2026-06-15"},
+    {"name": "Remote Work Policy", "risk_level": "low", "owner": "HR", "review_due": "2026-09-01"},
+    {"name": "AI Support Assistant SOW", "risk_level": "high", "owner": "Product", "review_due": "2026-05-20"}
+  ],
+  "test_questions": [
+    "What is the payment term in the Nimbus agreement?",
+    "When is the production launch target for the AI support assistant?",
+    "What data cannot be pasted into public AI tools?"
+  ]
+}

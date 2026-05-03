@@ -1,0 +1,62 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: insightdocs
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d insightdocs"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/insightdocs
+      AUTH_SECRET: ${AUTH_SECRET:-change-me-in-production-use-openssl-rand-base64-32}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_CHAT_MODEL: ${OPENAI_CHAT_MODEL:-gpt-4o-mini}
+      OPENAI_EMBEDDING_MODEL: ${OPENAI_EMBEDDING_MODEL:-text-embedding-3-small}
+      UPLOAD_DIR: /app/data/uploads
+      USE_DOCUMENT_WORKER: "true"
+      MAX_UPLOAD_MB: ${MAX_UPLOAD_MB:-25}
+      RATE_LIMIT_CHAT_PER_MIN: ${RATE_LIMIT_CHAT_PER_MIN:-20}
+      RATE_LIMIT_UPLOAD_PER_HOUR: ${RATE_LIMIT_UPLOAD_PER_HOUR:-30}
+    volumes:
+      - app_uploads:/app/data/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+
+  worker:
+    build: .
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/insightdocs
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_CHAT_MODEL: ${OPENAI_CHAT_MODEL:-gpt-4o-mini}
+      OPENAI_EMBEDDING_MODEL: ${OPENAI_EMBEDDING_MODEL:-text-embedding-3-small}
+      UPLOAD_DIR: /app/data/uploads
+      SKIP_DB_MIGRATE: "1"
+    volumes:
+      - app_uploads:/app/data/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    entrypoint: ["docker-entrypoint.sh"]
+    command: ["npx", "tsx", "scripts/document-worker.ts"]
+
+volumes:
+  postgres_data:
+  app_uploads:

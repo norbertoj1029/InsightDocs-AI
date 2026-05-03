@@ -1,0 +1,40 @@
+Project Requirements - InsightDocs AI MVP
+Version: 0.9
+Owner: Product Team
+Date: May 4, 2026
+
+Goal
+Build a secure document assistant that lets business users upload PDF, DOCX, and TXT files, ask questions, and receive answers grounded in the uploaded documents.
+
+Must-Have Features
+1. Users can sign up, log in, and view only their own documents.
+2. Users can upload PDF, DOCX, and TXT files up to 25 MB.
+3. The system extracts text and splits it into chunks of about 800 tokens with 150-token overlap.
+4. The system creates embeddings for each chunk and stores them in pgvector.
+5. Users can ask questions about a single document or all documents in a workspace.
+6. Answers must include citations showing document name and page number when available.
+7. Chat history must be stored and visible to the user.
+8. The dashboard must show document processing status: uploaded, processing, ready, or failed.
+9. The system must track estimated token usage and model cost per user.
+10. Admin users can retry failed document processing jobs.
+
+Non-Functional Requirements
+- Authentication is required for all document and chat endpoints.
+- Uploaded files must be private by default.
+- The backend must validate file type and size before processing.
+- Long document processing should run in a background worker.
+- The app should show friendly error messages for failed uploads, failed parsing, and model errors.
+- The first production version should support 500 active users and 50,000 uploaded documents.
+
+Out of Scope for MVP
+- Real-time collaborative editing.
+- OCR for scanned images.
+- Fine-tuning custom models.
+- Mobile app version.
+
+Acceptance Questions for RAG Testing
+- What file types are supported?
+- What is the maximum upload size?
+- What chunking strategy is required?
+- Should answers include citations?
+- Is OCR included in MVP?
