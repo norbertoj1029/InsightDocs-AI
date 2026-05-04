@@ -83,7 +83,7 @@ CREATE TABLE "DocumentChunk" (
     "tokenStart" INTEGER,
     "tokenEnd" INTEGER,
     "pageHint" INTEGER,
-    "embedding" vector(1536),
+    "embedding" vector(768),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT "DocumentChunk_pkey" PRIMARY KEY ("id")
 );

@@ -3,6 +3,7 @@ import { z } from "zod";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { answerWithRag } from "@/lib/rag";
+import { chatModel } from "@/lib/groq-client";
 import { checkChatRate } from "@/lib/rate-limit";
 import { recordUsage } from "@/lib/usage";
 import { writeAuditLog } from "@/lib/audit";
@@ -109,7 +110,7 @@ export async function POST(req: Request) {
         sources: result.sources as object,
         tokensIn: result.usage.promptTokens,
         tokensOut: result.usage.completionTokens,
-        model: process.env.OPENAI_CHAT_MODEL || "gpt-4o-mini",
+        model: chatModel(),
       },
     });
 
@@ -121,7 +122,7 @@ export async function POST(req: Request) {
     await recordUsage({
       userId: session.user.id,
       kind: "chat.rag",
-      model: process.env.OPENAI_CHAT_MODEL || "gpt-4o-mini",
+      model: chatModel(),
       tokensIn: result.usage.promptTokens,
       tokensOut: result.usage.completionTokens,
       embeddingCalls: result.usage.embeddingCalls,
@@ -145,7 +146,7 @@ export async function POST(req: Request) {
     });
   } catch (e) {
     const message = e instanceof Error ? e.message : "Chat failed";
-    if (message.includes("OPENAI_API_KEY")) {
+    if (message.includes("GROQ_API_KEY") || message.includes("not configured")) {
       return NextResponse.json(
         { error: "AI provider is not configured on the server." },
         { status: 503 },

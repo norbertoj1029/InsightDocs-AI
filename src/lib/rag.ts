@@ -1,9 +1,6 @@
 import { prisma } from "@/lib/prisma";
-import {
-  chatCompletion,
-  embedTexts,
-  estimateCostCents,
-} from "@/lib/openai-client";
+import { chatCompletion, estimateCostCents } from "@/lib/groq-client";
+import { embedTexts } from "@/lib/embeddings";
 
 export type SourceCitation = {
   filename: string;

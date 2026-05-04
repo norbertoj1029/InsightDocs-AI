@@ -102,7 +102,7 @@ model Document {
   @@index([userId, createdAt])
 }
 
-/// Embedding dimension must match OPENAI_EMBEDDING_MODEL (text-embedding-3-small = 1536)
+/// 768 dims — see `src/lib/embeddings.ts` (OpenAI text-embedding-3-* or Groq)
 model DocumentChunk {
   id         String   @id @default(cuid())
   documentId String
@@ -111,7 +111,7 @@ model DocumentChunk {
   tokenStart Int?
   tokenEnd   Int?
   pageHint   Int?
-  embedding  Unsupported("vector(1536)")?
+  embedding  Unsupported("vector(768)")?
   createdAt  DateTime @default(now())
 
   document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)

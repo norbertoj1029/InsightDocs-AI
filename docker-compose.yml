@@ -25,11 +25,16 @@ services:
       DATABASE_URL: postgresql://postgres:postgres@db:5432/insightdocs
       AUTH_SECRET: ${AUTH_SECRET:-change-me-in-production-use-openssl-rand-base64-32}
       NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      GROQ_CHAT_MODEL: ${GROQ_CHAT_MODEL:-llama-3.1-8b-instant}
+      GROQ_EMBEDDING_MODEL: ${GROQ_EMBEDDING_MODEL:-nomic-embed-text-v1.5}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
-      OPENAI_CHAT_MODEL: ${OPENAI_CHAT_MODEL:-gpt-4o-mini}
       OPENAI_EMBEDDING_MODEL: ${OPENAI_EMBEDDING_MODEL:-text-embedding-3-small}
+      EMBEDDING_PROVIDER: ${EMBEDDING_PROVIDER:-auto}
       UPLOAD_DIR: /app/data/uploads
-      USE_DOCUMENT_WORKER: "true"
+      # "false" = Next.js processes uploads after the request (after()). Avoids stuck QUEUED if no worker.
+      # Set "true" and use profile `worker` when you want a dedicated queue consumer.
+      USE_DOCUMENT_WORKER: ${USE_DOCUMENT_WORKER:-false}
       MAX_UPLOAD_MB: ${MAX_UPLOAD_MB:-25}
       RATE_LIMIT_CHAT_PER_MIN: ${RATE_LIMIT_CHAT_PER_MIN:-20}
       RATE_LIMIT_UPLOAD_PER_HOUR: ${RATE_LIMIT_UPLOAD_PER_HOUR:-30}
@@ -40,13 +45,17 @@ services:
         condition: service_healthy
 
   worker:
+    profiles: ["worker"]
     build: .
     restart: unless-stopped
     environment:
       DATABASE_URL: postgresql://postgres:postgres@db:5432/insightdocs
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      GROQ_CHAT_MODEL: ${GROQ_CHAT_MODEL:-llama-3.1-8b-instant}
+      GROQ_EMBEDDING_MODEL: ${GROQ_EMBEDDING_MODEL:-nomic-embed-text-v1.5}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
-      OPENAI_CHAT_MODEL: ${OPENAI_CHAT_MODEL:-gpt-4o-mini}
       OPENAI_EMBEDDING_MODEL: ${OPENAI_EMBEDDING_MODEL:-text-embedding-3-small}
+      EMBEDDING_PROVIDER: ${EMBEDDING_PROVIDER:-auto}
       UPLOAD_DIR: /app/data/uploads
       SKIP_DB_MIGRATE: "1"
     volumes:

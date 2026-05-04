@@ -4,7 +4,11 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { getActionPreset, type ActionPreset } from "@/lib/action-presets";
 import { loadDocumentTextsForUser } from "@/lib/document-context";
-import { chatCompletion, estimateCostCents } from "@/lib/openai-client";
+import {
+  chatCompletion,
+  chatModel,
+  estimateCostCents,
+} from "@/lib/groq-client";
 import { checkChatRate } from "@/lib/rate-limit";
 import { recordUsage } from "@/lib/usage";
 import { writeAuditLog } from "@/lib/audit";
@@ -91,7 +95,7 @@ export async function POST(req: Request) {
     await recordUsage({
       userId: session.user.id,
       kind: `action.${kind}`,
-      model: process.env.OPENAI_CHAT_MODEL || "gpt-4o-mini",
+      model: chatModel(),
       tokensIn: usage.prompt,
       tokensOut: usage.completion,
       estimatedUsdCents: estimateCostCents({
@@ -117,7 +121,7 @@ export async function POST(req: Request) {
     });
   } catch (e) {
     const message = e instanceof Error ? e.message : "Action failed";
-    if (message.includes("OPENAI_API_KEY")) {
+    if (message.includes("GROQ_API_KEY") || message.includes("not configured")) {
       return NextResponse.json(
         { error: "AI provider is not configured on the server." },
         { status: 503 },

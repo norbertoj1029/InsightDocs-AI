@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { storagePathForKey } from "@/lib/storage";
 import { parseDocumentBuffer } from "@/lib/parse-document";
 import { chunkByTokens, estimatePageHint } from "@/lib/chunking";
-import { embedTexts } from "@/lib/openai-client";
+import { embedTexts } from "@/lib/embeddings";
 
 function vectorLiteral(vec: number[]): string {
   return `[${vec.map((n) => (Number.isFinite(n) ? n : 0)).join(",")}]`;

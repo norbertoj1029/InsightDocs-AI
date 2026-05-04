@@ -1,7 +1,5 @@
 node_modules
 .next
-.env
-.env.local
 .env.*.local
 uploads
 *.log
@@ -9,3 +7,4 @@ uploads
 coverage
 .turbo
 dist
+config.bat

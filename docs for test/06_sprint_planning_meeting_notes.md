@@ -7,7 +7,7 @@
 ## Decisions
 
 1. The MVP will use PostgreSQL with pgvector instead of a separate managed vector database for the first release.
-2. The first AI provider will be OpenAI, but the backend must keep a provider abstraction so Claude or Gemini can be added later.
+2. The AI provider is Groq (chat + embeddings); the `openai` npm package is only the HTTP client against Groq’s compatible API.
 3. Document processing will be asynchronous using a job queue because large PDFs may take several minutes to parse and embed.
 4. The team will include citations in every answer, even for summary requests.
 5. The upload limit for MVP is 25 MB per file.

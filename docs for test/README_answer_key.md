@@ -66,7 +66,7 @@ Use these files to test upload, parsing, chunking, embeddings, RAG, summaries, c
 - Which vector database choice was made?  
   Expected: PostgreSQL with pgvector.
 - Which AI provider is first?  
-  Expected: OpenAI, with abstraction for Claude or Gemini later.
+  Expected: Groq (`GROQ_API_KEY`, `src/lib/groq-client.ts`).
 - Why use async processing?  
   Expected: large PDFs may take several minutes to parse and embed.
 - What are major risks?  
